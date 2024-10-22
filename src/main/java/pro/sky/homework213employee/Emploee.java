@@ -17,7 +17,7 @@ public class Emploee {
     }
 
     @Override
-    public String toString() { return this.name + " " +  this.secondName + ", salary " + salary + " "; }
+    public String toString() { return this.name + " " +  this.secondName + ", dep# " + this.departmentNo + ", salary " + salary + " "; }
 
     public String getName() { return name; }
     public String getSecondName() { return secondName; }

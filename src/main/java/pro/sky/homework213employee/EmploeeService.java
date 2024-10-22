@@ -2,13 +2,14 @@ package pro.sky.homework213employee;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface EmploeeService {
-    List<Emploee> getListOfEmploe(Integer depId);
-    int salarySum(Integer depId);
-    Emploee salaryMax(Integer depId);
-    Emploee salaryMin(Integer depId);
-    Map<Integer, List<Emploee>> allEmploees();
+    List<Emploee> getListOfEmploe(Set<Emploee> emploees, Integer depId);
+    int salarySum(Set<Emploee> emploees, Integer depId);
+    Emploee salaryMax(Set<Emploee> emploees, Integer depId);
+    Emploee salaryMin(Set<Emploee> emploees, Integer depId);
+    Map<Integer, List<Emploee>> allEmploees(Set<Emploee> emploees);
 
 //    Emploee salaryMax(Integer salary);
 //    Emploee salaryMin(Integer salary);
