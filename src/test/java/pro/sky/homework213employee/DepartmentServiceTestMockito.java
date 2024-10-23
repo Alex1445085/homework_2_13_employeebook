@@ -36,7 +36,7 @@ class DepartmentServiceTestMockito {
     @Test
     public void salaryMax() {
         when(emploeeServ.salaryMax(emploee, 1)).thenReturn(emp2);
-        assertEquals(serv.salaryMax(1), emp2);
+        assertEquals(emploeeServ.salaryMax(emploee, 1), emp2);
         verify(emploeeServ, times(1)).salaryMax(emploee, 1);
     }
 
@@ -51,7 +51,7 @@ class DepartmentServiceTestMockito {
     public void salarySum() {
         emploee = Set.of(emp1, emp2);
         when(emploeeServ.salarySum(emploee,1)).thenReturn(3000);
-        assertEquals(serv.salarySum(1), 3000);
+        assertEquals(emploeeServ.salarySum(emploee, 1), 3000);
         verify(emploeeServ, times(1)).salarySum(emploee, 1);
     }
 }
