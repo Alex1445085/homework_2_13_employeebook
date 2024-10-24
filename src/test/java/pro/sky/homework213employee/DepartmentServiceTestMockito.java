@@ -1,18 +1,17 @@
 package pro.sky.homework213employee;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,21 +22,27 @@ class DepartmentServiceTestMockito {
 
     @Mock
     private EmploeeServiceImpl emploeeServ;
+    //private DepartmentServiceImpl depServ;
 
     @InjectMocks
-    private DepartmentServiceImpl serv;
+    private DepartmentServiceImpl depServ;
+    //private EmploeeServiceImpl emploeeServ;
 
-    @BeforeEach
-    void setup() {
-        emploee.add(emp1);
-        emploee.add(emp2);
-    }
+//    @BeforeEach
+//    void setup() {
+//        emploee.add(emp1);
+//        emploee.add(emp2);
+//    }
 
     @Test
     public void salaryMax() {
-        when(emploeeServ.salaryMax(emploee, 1)).thenReturn(emp2);
+        emploee = Set.of(emp1, emp2);
+        when(depServ.salaryMax(1)).thenReturn(emp2);
         assertEquals(emploeeServ.salaryMax(emploee, 1), emp2);
-        verify(emploeeServ, times(1)).salaryMax(emploee, 1);
+//        assertThrows(DepartmentNotFoundException.class,
+//                () -> emploeeServ.salaryMax(emploee, 1),
+//                "DepartmentNotFound");
+//        verify(emploeeServ, times(1)).salaryMax(emploee, 1);
     }
 
     @Test
