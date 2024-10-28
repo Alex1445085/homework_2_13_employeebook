@@ -3,53 +3,68 @@ package pro.sky.homework213employee;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
+import static java.util.Comparator.comparing;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
 
-    Set<Emploee> emploees = new HashSet<>();
-
-//    {
-//        emploees.add(new Emploee("Ivanov", "Ivan", 1, 86811));
-//        emploees.add(new Emploee("Petrov", "Petr", 2, 80000));
-//        emploees.add(new Emploee("Ivanov", "Petr", 3, 99100));
-//        emploees.add(new Emploee("Kumov", "Ivan", 4, 97600));
-//        emploees.add(new Emploee("Gamov", "Egor", 5, 84667));
-//        emploees.add(new Emploee("Sizov", "Oleg", 5, 73000));
-//        emploees.add(new Emploee("Slikoff", "Mike", 4, 125400));
-//        emploees.add(new Emploee("Krotov", "Andr", 3, 95410));
-//        emploees.add(new Emploee("Vasin", "Nikolay", 1, 142000));
-//        emploees.add(new Emploee("Gorin", "Nikk", 1, 82000));
-//    }
-
     private final EmploeeService serv;
     public DepartmentServiceImpl(EmploeeService serv) { this.serv = serv; }
 
-    {emploees.addAll(Emploee.getSetEmploees());}
-
-    @Override
-    public List<Emploee> employeeInDepartment(Integer depId) {
-        List<Emploee> result = serv.getListOfEmploe(emploees, depId);
-        return Collections.unmodifiableList(result);
-    }
-
     @Override
     public int salarySum(Integer depId) {
-        return serv.salarySum(emploees, depId);
+        int result = 0;
+        for(Emploee temp : serv.getEmploees()) {
+            if (temp.getDepartmentNo() == depId) { result = result + temp.getSalary(); }
+        }
+        return result;
     }
 
     @Override
     public Emploee salaryMax(Integer depId) {
-        return serv.salaryMax(emploees, depId);
+        Emploee emploeeInDepartment = serv.getEmploees()
+                .stream()
+                .filter(x -> x.getDepartmentNo().equals(depId))
+                .max(comparing(x -> x.getSalary()))
+                .orElseThrow(() -> new DepartmentNotFoundException("Department not found"));
+        return emploeeInDepartment;
     }
 
     @Override
     public Emploee salaryMin(Integer depId) {
-        return serv.salaryMin(emploees, depId);
+//        Predicate<Emploee> predicate = new Predicate<Emploee>() {
+//            @Override
+//            public boolean test(Emploee x) {
+//                return x.getDepartmentNo().equals(depId);
+//            }
+//        };
+//        Predicate<Emploee> predicate1 = x -> x.getDepartmentNo().equals(depId);
+//        Consumer<Emploee> consumer = y -> y.setSalary(y.getSalary() + 10000);
+//              .peek(consumer)
+        Emploee emploeeInDepartment = serv.getEmploees()
+                .stream()
+                .filter(x -> x.getDepartmentNo().equals(depId))
+                .min(comparing(x -> x.getSalary()))
+                .orElseThrow(() -> new DepartmentNotFoundException("Department not found"));
+        return emploeeInDepartment;
     }
 
     @Override
-    public Map<Integer, List<Emploee>> allEmployees() {
-        return serv.allEmploees(emploees);
+    public Set<Emploee> allEmployees() {
+        return serv.getEmploees();
+    }
+
+    @Override
+    public List<Emploee> employeeInDepartment(Integer depId) {
+        List<Emploee> temp = new ArrayList<>();
+        for (Emploee t : serv.getEmploees()) {
+            if (Objects.equals(t.getDepartmentNo(), depId)) {
+                temp.add(t);
+            }
+        }
+        return Collections.unmodifiableList(temp);
     }
 }

@@ -8,55 +8,85 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class DepartmentServiceTestMockito {
-    Emploee emp1 = new Emploee("Aa", "Bb", 1, 1000);
-    Emploee emp2 = new Emploee("Cc", "Dd", 1, 2000);
-    Set<Emploee> emploee = new HashSet<>();
+    Set<Emploee> emploee = Set.of(new Emploee("Aa", "Bb", 1, 1000),
+                                  new Emploee("Cc", "Dd", 1, 2000),
+                                  new Emploee("Ee", "Ff", 2, 3000));
 
     @Mock
     private EmploeeServiceImpl emploeeServ;
-    //private DepartmentServiceImpl depServ;
 
     @InjectMocks
     private DepartmentServiceImpl depServ;
-    //private EmploeeServiceImpl emploeeServ;
-
-//    @BeforeEach
-//    void setup() {
-//        emploee.add(emp1);
-//        emploee.add(emp2);
-//    }
 
     @Test
     public void salaryMax() {
-        emploee = Set.of(emp1, emp2);
-        when(depServ.salaryMax(1)).thenReturn(emp2);
-        assertEquals(emploeeServ.salaryMax(emploee, 1), emp2);
-//        assertThrows(DepartmentNotFoundException.class,
-//                () -> emploeeServ.salaryMax(emploee, 1),
-//                "DepartmentNotFound");
-//        verify(emploeeServ, times(1)).salaryMax(emploee, 1);
+        when(emploeeServ.getEmploees()).thenReturn(emploee);
+        Emploee expected = emploee
+                .stream()
+                .filter(x -> x.getDepartmentNo().equals(1))
+                .max(Comparator.comparingInt(y -> y.getSalary()))
+                .get();
+        Emploee actual = depServ.salaryMax(1);
+        assertEquals(actual, expected);
+        verify(emploeeServ, times(1)).getEmploees();
     }
 
     @Test
     public void salaryMin() {
-        when(emploeeServ.salaryMin(emploee, 1)).thenReturn(emp1);
-        assertEquals(emploeeServ.salaryMin(emploee, 1), emp1);
-        verify(emploeeServ, times(1)).salaryMin(emploee, 1);
+        when(emploeeServ.getEmploees()).thenReturn(emploee);
+        Emploee expected = emploee
+                .stream()
+                .filter(x -> x.getDepartmentNo().equals(1))
+                .min(Comparator.comparingInt(y -> y.getSalary()))
+                .get();
+        Emploee actual = depServ.salaryMin(1);
+
+        assertEquals(actual, expected);
+        verify(emploeeServ, times(1)).getEmploees();
     }
 
     @Test
     public void salarySum() {
-        emploee = Set.of(emp1, emp2);
-        when(emploeeServ.salarySum(emploee,1)).thenReturn(3000);
-        assertEquals(emploeeServ.salarySum(emploee, 1), 3000);
-        verify(emploeeServ, times(1)).salarySum(emploee, 1);
+        when(emploeeServ.getEmploees()).thenReturn(emploee);
+        int expected = Math.toIntExact(emploee
+                .stream()
+                .filter(x -> x.getDepartmentNo().equals(1))
+                .mapToInt(y -> y.getSalary()).sum());
+        int actual = depServ.salarySum(1);
+        assertEquals(expected, actual);
+        verify(emploeeServ, times(1)).getEmploees();
+    }
+
+    @Test
+    public void emploeeInDepartment() {
+        when(emploeeServ.getEmploees()).thenReturn(emploee);
+        List<Emploee> expected = emploee
+                .stream()
+                .filter(x -> x.getDepartmentNo().equals(1))
+                .collect(Collectors.toList());
+                //.toList();
+        List<Emploee> actual = depServ.employeeInDepartment(1);
+        assertEquals(expected, actual);
+        verify(emploeeServ, times(1)).getEmploees();
+    }
+
+    @Test
+    public void allEmploees() {
+        when(emploeeServ.getEmploees()).thenReturn(emploee);
+        Set<Emploee> expected = emploee;
+        Set<Emploee> actual = depServ.allEmployees();
+        assertEquals(expected, actual);
+        verify(emploeeServ, times(1)).getEmploees();
     }
 }
