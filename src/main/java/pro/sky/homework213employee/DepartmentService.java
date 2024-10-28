@@ -3,7 +3,6 @@ package pro.sky.homework213employee;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 public interface DepartmentService {
     List<Emploee> employeeInDepartment(Integer depId);
     int salarySum(Integer depId);

@@ -22,7 +22,6 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
         return result;
     }
-
     @Override
     public Emploee salaryMax(Integer depId) {
         Emploee emploeeInDepartment = serv.getEmploees()

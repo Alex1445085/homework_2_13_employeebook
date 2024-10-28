@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
-
 @RestController
 @RequestMapping("/department")
 public class DepartmentController {
