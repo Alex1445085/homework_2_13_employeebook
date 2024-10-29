@@ -4,12 +4,11 @@ import pro.sky.homework213employee.interfaces.EmploeeService;
 import org.springframework.stereotype.Repository;
 import java.util.*;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import pro.sky.homework213employee.Emploee;
 import pro.sky.homework213employee.exceptions.EmployeeAlreadyAddedException;
 import pro.sky.homework213employee.exceptions.EmployeeNotExistException;
 import pro.sky.homework213employee.exceptions.FirstNameOrLastNameIsEmptyException;
+
 @Repository
 public class EmploeeServiceImpl implements EmploeeService {
 
@@ -37,7 +36,6 @@ public class EmploeeServiceImpl implements EmploeeService {
     }
 
     @Override
-    @PostMapping
     public String addEmploee(String name, String secondName, int depId, int salary) {
         if (name.isEmpty() || secondName.isEmpty()) {
             throw new FirstNameOrLastNameIsEmptyException("e");
@@ -67,7 +65,6 @@ public class EmploeeServiceImpl implements EmploeeService {
     }
 
     @Override
-    @DeleteMapping
     public String delEmploee(String name, String secondName) {
         Emploee e = new Emploee(name, secondName, 0, 0);
         String temp = e.makeKey(e);
