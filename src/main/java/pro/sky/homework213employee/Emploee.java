@@ -1,9 +1,7 @@
 package pro.sky.homework213employee;
-
 import java.util.Objects;
 
 public class Emploee {
-
     private String name;
     private String secondName;
     private int departmentNo;
